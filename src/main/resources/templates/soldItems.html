@@ -1,0 +1,24 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout/main.html">
+<div layout:fragment="site_content">
+    <div th:if="${cart!=null}" class="mt-3">
+        <table class="table table-striped" >
+            <thead class="font-weight-bold">
+            <tr>
+                <td>Id</td>
+                <td>Name</td>
+                <td>Amount</td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="br : ${cart}">
+                <td th:text="${br.getId()}"></td>
+                <td th:text="${br.getName()}"></td>
+                <td th:text="${br.getQuantity()}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+</html>

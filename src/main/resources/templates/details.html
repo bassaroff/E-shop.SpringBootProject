@@ -1,0 +1,265 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout/main.html">
+<div layout:fragment="site_content">
+    <div class="row" th:if="${user!=null}">
+        <div class="list-group col-3 mt-5">
+            <a href="#" class="list-group-item list-group-item-action active" style="background-color: lightcoral;">
+                <span th:text="#{label.roles}"></span>
+            </a>
+            <div th:each="br : ${roles}" class="list-group-item list-group-item-action" style="color: #323232" >
+
+
+                <form class="form-inline" th:action="@{'/assignRole'}" method="post" style="margin:0">
+                    <span th:text="${br.getRole()}"></span>
+                    <input type="hidden" name="user_id" th:value="${user.getId()}">
+                    <input type="hidden" name="role_id" th:value="${br.getId()}">
+                    <button class="ml-auto btn btn-success m-2">+</button>
+                </form>
+            </div>
+
+        </div>
+        <div class="col-5 mx-auto mt-5 shadow bg-white rounded p-5">
+            <form th:action="@{/saveUser}" method="post" class="w-100">
+                <input type="hidden" name="id" th:value="${user.id}">
+                <div class="form-group">
+                    <label for="user_fullname" th:text="#{label.fullname}"></label>
+                    <input type="text" class="form-control" name="user_fullname" id="user_fullname" th:value="${user.fullName}">
+                </div>
+                <div class="form-group">
+                    <label for="user_email" th:text="#{label.email}"></label>
+                    <input type="email" class="form-control" name="user_email" id="user_email" th:value="${user.email}">
+                </div>
+                <div class="form-group">
+                    <label for="user_password" th:text="#{label.pass}"></label>
+                    <input type="password" class="form-control" name="user_password" id="user_password">
+                </div>
+                <div class="form-row">
+                    <button class="btn form-control" style="background-color: lightcoral;color: white" type="submit"
+                            th:text="#{button.save}"></button>
+                    <a class="btn btn-danger form-control mt-2" type="button" th:href="${'/delete/user/' + user.getId()}"
+                       th:text="#{button.delete}"></a>
+                </div>
+            </form>
+        </div>
+
+
+
+
+        <div class="list-group col-3 mt-5">
+            <a href="#" class="list-group-item list-group-item-action active" style="background-color: lightcoral;">
+                <span th:text="#{label.added_role}"></span>
+            </a>
+            <div th:each="role : ${user.roles}" class="list-group-item list-group-item-action" style="color: #323232" >
+
+
+                <form class="form-inline" th:action="@{'/deleteRole'}" method="post" style="margin:0">
+                    <span th:text="${role.getRole()}"></span>
+                    <input type="hidden" name="user_id" th:value="${user.id}">
+                    <input type="hidden" name="role_id" th:value="${role.id}">
+                    <button class="ml-auto btn btn-danger m-2">-</button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+    <div class="row" th:if="${item!=null}">
+            <div class="list-group col-3 mt-5">
+                <a href="#" class="list-group-item list-group-item-action active" style="background-color: lightcoral;">
+                    <span th:text="#{label.addCategory}"></span>
+                </a>
+                <div th:each="br : ${categories}" class="list-group-item list-group-item-action" style="color: #323232" >
+
+
+                    <form class="form-inline" th:action="@{'/assigncategory'}" method="post" style="margin:0">
+                        <span th:text="${br.getName()}"></span>
+                        <input type="hidden" name="item_id" th:value="${item.getId()}">
+                        <input type="hidden" name="cat_id" th:value="${br.getId()}">
+                        <button class="ml-auto btn btn-success m-2">+</button>
+                    </form>
+                </div>
+
+            </div>
+            <div class="col-5 mx-auto mt-5 shadow bg-white rounded p-5">
+                <form th:action="@{/addPhoto}" method="post" enctype="multipart/form-data">
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" id="customFile" name="item_photo">
+                        <input type="hidden"  name="item_id" th:value="${item.id}">
+                        <label class="custom-file-label" for="customFile" th:text="#{button.chooseFile}"></label>
+                    </div>
+                    <button class="btn btn-success mt-2" th:text="#{button.uploadFile}"></button>
+                </form>
+                <div class="my-3" th:each="photo : ${itemphotos}">
+                    <hr>
+                    <div class="d-flex justify-content-between">
+
+                        <form class="form-inline" th:action="@{'/deletePhoto'}" method="post" style="margin:0">
+                            <input type="hidden" name="item_id" th:value="${item.getId()}">
+                            <input type="hidden" name="pic_id" th:value="${photo.id}">
+                            <button class="ml-auto btn btn-danger m-2">-</button>
+                        </form>
+
+                        <img th:class="w-50" th:src="@{'/viewItemPhoto/'+${photo.getUrl()}}" class="my-3" style="width: 100%;">
+                    </div>
+                </div>
+                <hr>
+                <form th:action="@{/save}" method="post" class="w-100">
+                    <input type="hidden" name="id" th:value="${item.id}">
+                    <div class="form-group">
+                        <label for="name" th:text="#{label.name}"></label>
+                        <input type="text" class="form-control" name="name" id="name" th:value="${item.name}">
+                    </div>
+                    <div class="form-group">
+                        <label for="desc" th:text="#{label.desc}"></label>
+                        <textarea class="form-control" name="description" id="desc" th:text="${item.description}"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="price" th:text="#{label.price}"></label>
+                        <input type="number" class="form-control" name="price" id="price" th:value="${item.price}"
+                               max="99999999">
+                    </div>
+                    <div class="form-group">
+                        <label for="date" th:text="#{label.date}"></label>
+                        <input type="date" class="form-control" name="date" id="date" disabled
+                               th:value="${item.addedTime.toLocalDate()}">
+                    </div>
+                    <img th:src="${item.smallPicURL}" class="mx-auto d-block my-4" width="250px" alt="Responsive image">
+                    <div class="form-group">
+                        <label for="smPic" th:text="#{label.smpic}"></label>
+                        <input type="text" class="form-control" name="smallPic" id="smPic" th:value="${item.smallPicURL}">
+                    </div>
+                    <img th:src="${item.largePicURL}" class="img-fluid my-4" alt="Responsive image">
+                    <div class="form-group">
+                        <label for="lgPic" th:text="#{label.lgpic}"></label>
+                        <input type="text" class="form-control" name="bigPic" id="lgPic" th:value="${item.largePicURL}">
+                    </div>
+                    <div class="form-group">
+                        <label for="inTop" th:text="#{label.intop}"></label>
+                        <select class="form-control" name="inTop" id="inTop">
+                            <option th:value="${item.inTopPage.booleanValue()}"
+                                    th:text="${item.inTopPage.booleanValue()}"></option>
+                            <option th:value="${!item.inTopPage.booleanValue()}"
+                                    th:text="${!item.inTopPage.booleanValue()}"></option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="brands" th:text="#{label.brands}"></label>
+                        <select class="form-control" name="brand_id" id="brands">
+                            <option th:each="br: ${brands}" th:text="${br.getName()}" th:value="${br.getId()}"
+                                    th:selected="${br!=null&&br.getId()==item.getBrand().getId()}"></option>
+                        </select>
+                    </div>
+                    <div class="form-row">
+                        <button class="btn form-control" style="background-color: lightcoral;color: white" type="submit"
+                                th:text="#{button.save}"></button>
+                        <a class="btn btn-danger form-control mt-2" type="button" th:href="${'/delete/item/' + item.getId()}"
+                           th:text="#{button.delete}"></a>
+                    </div>
+                </form>
+            </div>
+
+            <div class="list-group col-3 mt-5">
+                <a href="#" class="list-group-item list-group-item-action active" style="background-color: lightcoral;">
+                    <span th:text="#{label.added_category}"></span>
+                </a>
+                <div th:each="br : ${item.categories}" class="list-group-item list-group-item-action" style="color: #323232" >
+
+
+                    <form class="form-inline" th:action="@{'/deleteCategory'}" method="post" style="margin:0">
+                        <span th:text="${br.getName()}"></span>
+                        <input type="hidden" name="item_id" th:value="${item.getId()}">
+                        <input type="hidden" name="cat_id" th:value="${br.id}">
+                        <button class="ml-auto btn btn-danger m-2">-</button>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+
+
+    <div class="row">
+        <div class="col-5 mx-auto mt-5 shadow bg-white rounded p-5" th:if="${country!=null}">
+            <form th:action="@{/saveCountry}" method="post" class="w-100">
+                <input type="hidden" name="id" th:value="${country.getId()}">
+                <div class="form-group">
+                    <label for="nameCountry" th:text="#{label.name}"></label>
+                    <input type="text" class="form-control" name="nameCountry" id="nameCountry"
+                           th:value="${country.getName()}">
+                </div>
+                <div class="form-group">
+                    <label for="code" th:text="#{label.code}"></label>
+                    <input type="text" class="form-control" name="code" id="code" th:value="${country.getCode()}">
+                </div>
+
+                <div class="form-row">
+                    <button class="btn form-control" style="background-color: lightcoral;color: white" type="submit"
+                            th:text="#{button.save}"></button>
+                    <a class="btn btn-danger form-control mt-2" th:href="${'/delete/country/' + country.getId()}"
+                       type="button" th:text="#{button.delete}"></a>
+                </div>
+            </form>
+        </div>
+        <div class="col-5 mx-auto mt-5 shadow bg-white rounded p-5" th:if="${brand!=null}">
+            <form th:action="@{/saveBrand}" method="post" class="w-100">
+                <input type="hidden" name="id" th:value="${brand.getId()}">
+                <div class="form-group">
+                    <label for="nameBrand" th:text="#{label.name}"></label>
+                    <input type="text" class="form-control" name="nameBrand" id="nameBrand" th:value="${brand.getName()}">
+                </div>
+                <div class="form-group">
+                    <label for="countries" th:text="#{label.country}"></label>
+                    <select class="form-control" name="country_id" id="countries">
+                        <option th:each="cnt: ${countries}" th:text="${cnt.getName()}" th:value="${cnt.getId()}"
+                                th:selected="${cnt!=null&&cnt.getId()==brand.getCountry().getId()}"></option>
+                    </select>
+                </div>
+                <div class="form-row">
+                    <button class="btn form-control" style="background-color: lightcoral;color: white" type="submit"
+                            th:text="#{button.save}"></button>
+                    <a class="btn btn-danger form-control mt-2" type="button" th:href="${'/delete/brand/' + brand.getId()}"
+                       th:text="#{button.delete}"></a>
+                </div>
+            </form>
+            <!-- DELETE MODAL -->
+
+            <!-- END OF MODAL -->
+        </div>
+
+        <div class="col-5 mx-auto mt-5 shadow bg-white rounded p-5" th:if="${category!=null}">
+            <form th:action="@{/saveCategory}" method="post" class="w-100">
+                <input type="hidden" name="id" th:value="${category.getId()}">
+                <div class="form-group">
+                    <label for="nameCountry" th:text="#{label.name}"></label>
+                    <input type="text" class="form-control" name="nameCategory" id="nameCategory"
+                           th:value="${category.getName()}">
+                </div>
+
+                <div class="form-row">
+                    <button class="btn form-control" style="background-color: lightcoral;color: white" type="submit"
+                            th:text="#{button.save}"></button>
+                    <a class="btn btn-danger form-control mt-2" th:href="${'/delete/category/' + category.getId()}"
+                       type="button" th:text="#{button.delete}"></a>
+                </div>
+            </form>
+        </div>
+        <div class="col-5 mx-auto mt-5 shadow bg-white rounded p-5" th:if="${role!=null}">
+            <form th:action="@{/saveRole}" method="post" class="w-100">
+                <input type="hidden" name="id" th:value="${role.getId()}">
+                <div class="form-group">
+                    <label for="role" th:text="#{label.name}"></label>
+                    <input type="text" class="form-control" name="role" id="role"
+                           th:value="${role.getRole()}">
+                </div>
+
+                <div class="form-row">
+                    <button class="btn form-control" style="background-color: lightcoral;color: white" type="submit"
+                            th:text="#{button.save}"></button>
+                    <a class="btn btn-danger form-control mt-2" th:href="${'/delete/role/' + role.getId()}"
+                       type="button" th:text="#{button.delete}"></a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+</html>

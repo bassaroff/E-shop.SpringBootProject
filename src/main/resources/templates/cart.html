@@ -1,0 +1,170 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout/main.html">
+<div layout:fragment="site_content">
+<div class="row">
+    <div class="col-9" th:if="${session.cart.size()==0}">
+        <div class="row mt-5">
+            <div class="col-12 d-flex ">
+                <svg th:class="mx-auto" width="100px" height="100px" viewBox="0 0 16 16" class="bi bi-cart3" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l.84 4.479 9.144-.459L13.89 4H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm7 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>
+                </svg>
+            </div>
+            <div class="col-12 d-flex ">
+               <h2 class="mx-auto mt-5">Your Cart is Empty</h2>
+            </div>
+            <div class="col-12 d-flex ">
+                <h3 class="mx-auto my-3">Add something to make me happy :)</h3>
+            </div>
+            <div class="col-12 d-flex ">
+                <a class="btn btn-primary mx-auto my-3"href="/">Come back to Home</a>
+            </div>
+
+        </div>
+    </div>
+    <div class="col-9" th:if="${session.cart.size()>0}">
+        <div class="row">
+            <div class="card mb-3 col-12 mt-5 shadow bg-white rounded"  th:each="item : ${session.cart}">
+                <div class="">
+                    <div class="row no-gutters p-3">
+                        <div class="col-md-4 p-2">
+                            <img th:src="${item.getSmallPicURL()}" class="card-img-top img-thumbnail" alt="...">
+                        </div>
+                        <div class="col-md-5">
+                            <div class="card-body " style="height: 70%">
+                                <a style="text-decoration: none; color: inherit" th:href="@{'/details/' + ${item.getId()}}"><h3 class="card-title font-weight-bold" th:text="${item.getName()}"></h3></a>
+                                <h5 class="card-text" th:text="${'KZT ' + item.getPrice()}"></h5>
+                                <p class="card-text" th:text="${item.getDescription()}"></p>
+
+                            </div>
+                            <div class="card-body">
+                                <h5>BRAND:<a th:href="'/brands/' + ${item.getBrand().getId()}">
+                                    <span th:text="${item.getBrand().getName() + ', ' + item.getBrand().getCountry().getName()}"></span></a></h5>
+
+                                <span th:each="i: ${#numbers.sequence(1,item.getStars())}" style="color: orange">
+                                            <i class="fa fa-star checked"></i>
+                                        </span>
+                                <span th:each="i: ${#numbers.sequence(0, 5 - item.getStars())}">
+                                            <i th:unless="${i >= 5 - item.getStars()}" class="fa fa-star"></i>
+                                        </span>
+                            </div>
+                        </div>
+                        <div class="col-md-3 ">
+                            <hr>
+                            <div class="col-12 d-flex justify-content-around">
+
+                                <a class="btn btn-danger my-auto" th:href="${'/decreaseAmountFromCart/' + item.id }" > < </a>
+                                <h2 th:text="${item.getQuantity()}"></h2>
+                                <a class="btn btn-success my-auto" th:href="${'/buy/' + item.id }" > > </a>
+                            </div>
+                            <hr>
+                            <div class="col-12 p-3 d-flex">
+                                <a class="btn btn-secondary mx-auto" th:href="${'/removeItemFromCart/' + item.id }" >Remove</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    <div class="col-3 mt-5">
+        <div class="card">
+            <h5 class="card-header" th:text="#{label.cart}"></h5>
+            <div class="card-body">
+                <div class="d-flex">
+                    <h5 class="card-title" th:text="#{label.items}"></h5>
+                    <h5 class="card-text ml-2" th:text="${session.cart.size()}"></h5>
+                </div>
+
+                <div class="d-flex mb-5">
+                    <h5 class="card-text" th:text="#{label.total}"></h5>
+                    <h5 class="card-text ml-2" th:text="${total}"></h5>
+                </div>
+
+                <a class="btn btn-danger" th:href="${'/clearCart'}" >clear</a>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                   Pay
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--<div class="row row-cols-1 row-cols-md-3 mt-2">-->
+<!--    <div class="col mb-4" th:each="item : ${session.cart}">-->
+<!--        <div class="card">-->
+<!--            <img th:src="${item.getSmallPicURL()}" class="card-img-top" alt="...">-->
+<!--            <div class="card-body">-->
+<!--                <a style="text-decoration: none; color: inherit" th:href="@{'/details/' + ${item.getId()}}"><h3 class="card-title font-weight-bold" th:text="${item.getName()}"></h3></a>-->
+<!--                <h5 class="card-text" th:text="${'KZT ' + item.getPrice()}"></h5>-->
+<!--                <p class="card-text" th:text="${item.getDescription()}"></p>-->
+
+<!--                <h5>BRAND:<a th:href="'/brands/' + ${item.getBrand().getId()}">-->
+<!--                    <span th:text="${item.getBrand().getName() + ', ' + item.getBrand().getCountry().getName()}"></span></a></h5>-->
+<!--                <h2 th:text="${item.getQuantity()}"></h2>-->
+
+<!--                <a class="btn btn-success" th:href="${'/buy/' + item.id }" >+</a>-->
+<!--                <a class="btn btn-danger" th:href="${'/decreaseAmountFromCart/' + item.id }" >-</a>-->
+<!--                <a class="btn btn-danger" th:href="${'/removeItemFromCart/' + item.id }" >&#45;&#45;</a>-->
+
+<!--            </div>-->
+
+<!--            <div class="card-footer">-->
+<!--                            <span th:each="i: ${#numbers.sequence(1,item.getStars())}" style="color: orange">-->
+<!--                                <i class="fa fa-star checked"></i>-->
+<!--                            </span>-->
+<!--                <span th:each="i: ${#numbers.sequence(0, 5 - item.getStars())}">-->
+<!--                                <i th:unless="${i >= 5 - item.getStars()}" class="fa fa-star"></i>-->
+<!--                            </span>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <hr>-->
+
+<!--</div>-->
+
+
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form class="form-row" th:action="@{'/payCart'}" method="post">
+                        <div class="form-group col-12">
+                            <label for="fullname" th:text="#{label.fullname}"></label>
+                            <input type="text" class="form-control" id="fullname" required>
+                        </div>
+                        <div class="form-group col-12">
+                            <label for="cardnumber" th:text="#{label.cardNumber}"></label>
+                            <input type="text" maxlength="12" minlength="12" class="form-control" id="cardnumber" required>
+
+                        </div>
+                        <div class="form-group col-6">
+                            <label for="expiration" th:text="#{label.expiration}"></label>
+                            <input type="text" maxlength="5" minlength="5" class="form-control" id="expiration" required>
+                        </div>
+                        <div class="form-group col-6">
+                            <label for="cvv" th:text="#{label.cvv}"></label>
+                            <input type="text" maxlength="3" minlength="3" class="form-control" id="cvv" required>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </form>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</html>

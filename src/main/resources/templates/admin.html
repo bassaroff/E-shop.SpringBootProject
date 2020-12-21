@@ -1,0 +1,371 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout/main.html">
+<div layout:fragment="site_content">
+<!--    <div class="row mx-3 my-4">-->
+<!--        <div class="sidebar col-sm-2 ">-->
+
+<!--            <div class="list-group" id="list-tab" role="tablist">-->
+<!--                <a class="list-group-item list-group-item-action" th:disabled="'disabled'"><h4 class="text-center">Admin page</h4></a>-->
+<!--                <a class="list-group-item list-group-item-action" th:href="'/admin/items'">Items</a>-->
+<!--                <a class="list-group-item list-group-item-action" th:href="'/admin/countries'">Countries</a>-->
+<!--                <a class="list-group-item list-group-item-action" th:href="'/admin/Brands'">Brands</a>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+    <div class="modal fade" id="ModalRole" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"  id="ModalRoleTitle" th:text="#{button.add_role}"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form th:action="@{'/addRole'}" method="POST">
+                    <div class="modal-body">
+                        <input type="text" name="role" class="form-control" th:placeholder="Role">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                                th:text="#{button.close}"></button>
+                        <button type="submit" class="btn" style="background-color: lightcoral;color: white" th:text="#{button.add_role}"></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="ModalUser" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"  id="ModalUserTitle" th:text="#{button.add_user}"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form th:action="@{'/addUser'}" method="POST">
+                    <div class="modal-body">
+                        <input type="text" name="user_fullname" class="form-control" th:placeholder="#{label.fullname}">
+                        <input type="email" name="user_email" class="form-control mt-3" th:placeholder="#{label.email}">
+                        <input type="password" name="user_password" class="form-control mt-3" th:placeholder="#{label.pass}">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                                th:text="#{button.close}"></button>
+                        <button type="submit" class="btn" style="background-color: lightcoral;color: white" th:text="#{button.add_user}"></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="ModalItem" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"  id="ModalItemTitle" th:text="#{button.add}"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form th:action="@{'/add'}" method="POST">
+                    <div class="modal-body">
+                        <input type="text" name="name" class="form-control" th:placeholder="#{label.name}">
+                        <input type="text" name="description" class="form-control mt-3" th:placeholder="#{label.desc}">
+                        <input type="text" name="price" class="form-control mt-3" th:placeholder="#{label.price}">
+                        <input type="text" name="stars" class="form-control mt-3" th:placeholder="#{label.stars}">
+                        <input type="text" name="smallPic" class="form-control mt-3" th:placeholder="#{label.smpic}">
+                        <input type="text" name="bigPic" class="form-control mt-3" th:placeholder="#{label.lgpic}">
+                        <select class="form-control mt-3" name="brand_id">
+                            <option th:each="br : ${add_brands}" th:text="${br.getName()}" th:value="${br.getId()}"></option>
+                        </select>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                                th:text="#{button.close}"></button>
+                        <button type="submit" class="btn" style="background-color: lightcoral;color: white" th:text="#{button.add}"></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- MODAL -->
+    <div class="modal fade" id="ModalCountry" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"  id="ModalCountryTitle" th:text="#{button.add_country}"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form th:action="@{'/add_country'}" method="POST">
+                    <div class="modal-body">
+                        <input type="text" name="name" class="form-control" th:placeholder="#{label.name}">
+                        <input type="text" name="code" class="form-control mt-3" th:placeholder="#{label.code}">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                                th:text="#{button.close}"></button>
+                        <button type="submit" class="btn" style="background-color: lightcoral;color: white" th:text="#{button.add}"></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="ModalBrand" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"  id="ModalBrandTitle" th:text="#{button.add_brand}"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form th:action="@{'/add_brand'}" method="POST">
+                    <div class="modal-body">
+                        <input type="text" name="name" class="form-control" th:placeholder="#{label.name}">
+                        <select class="form-control mt-3" name="country_id">
+                            <option th:each="cnt : ${add_countries}" th:text="${cnt.getName()}" th:value="${cnt.getId()}"></option>
+                        </select>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                                th:text="#{button.close}"></button>
+                        <button type="submit" class="btn" style="background-color: lightcoral;color: white" th:text="#{button.add}"></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="ModalCategory" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"  id="ModalCategoryTitle" th:text="#{button.add_category}"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form th:action="@{'/add_category'}" method="POST">
+                    <div class="modal-body">
+                        <input type="text" name="name" class="form-control" th:placeholder="#{label.name}">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                                th:text="#{button.close}"></button>
+                        <button type="submit" class="btn" style="background-color: lightcoral;color: white" th:text="#{button.add}"></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="row py-3">
+        <div class="col-3" id="sticky-sidebar">
+            <div class="sticky-top">
+                <div class="list-group" id="list-tab" role="tablist">
+                    <a class="list-group-item list-group-item-action bg-dark" th:disabled="'disabled'" style="color: white"><h4 class="text-center">Admin page</h4></a>
+                    <a class="list-group-item list-group-item-action" th:href="'/admin/users'">Users</a>
+                    <a class="list-group-item list-group-item-action" th:href="'/admin/roles'">Roles</a>
+                    <a class="list-group-item list-group-item-action" th:href="'/admin/items'">Items</a>
+                    <a class="list-group-item list-group-item-action" th:href="'/admin/countries'">Countries</a>
+                    <a class="list-group-item list-group-item-action" th:href="'/admin/brands'">Brands</a>
+                    <a class="list-group-item list-group-item-action" th:href="'/admin/categories'">Categories</a>
+                    <a class="list-group-item list-group-item-action" th:href="'/admin/carts'">Carts</a>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-9">
+            <button type="button" class="btn" style="background-color: lightcoral;color: white" data-toggle="modal" data-target="#ModalUser" th:if="${users!=null}"
+                    th:text="#{button.add_user}">
+            </button>
+            <button type="button" class="btn" style="background-color: lightcoral;color: white" data-toggle="modal" data-target="#ModalRole" th:if="${roles!=null}"
+                    th:text="#{button.add_role}">
+            </button>
+            <button type="button" class="btn" style="background-color: lightcoral;color: white" data-toggle="modal" data-target="#ModalItem" th:if="${items!=null}"
+                    th:text="#{button.add}">
+            </button>
+            <button type="button" class="btn" style="background-color: lightcoral;color: white" data-toggle="modal" data-target="#ModalCountry" th:if="${countries!=null}"
+                    th:text="#{button.add_country}">
+            </button>
+            <button type="button" class="btn" style="background-color: lightcoral;color: white" data-toggle="modal" data-target="#ModalBrand" th:if="${brands!=null}"
+                    th:text="#{button.add_brand}">
+            </button>
+            <button type="button" class="btn" style="background-color: lightcoral;color: white" data-toggle="modal" data-target="#ModalCategory" th:if="${categories!=null}"
+                    th:text="#{button.add_category}">
+            </button>
+
+            <div th:if="${users!=null}" class="mt-3">
+                <table class="table table-striped" >
+                    <thead class="font-weight-bold">
+                    <tr>
+                        <td>Id</td>
+                        <td>Fullname</td>
+                        <td>Email</td>
+                        <td>Password</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="user : ${users}">
+                        <td th:text="${user.getId()}"></td>
+                        <td th:text="${user.getFullName()}"></td>
+                        <td th:text="${user.getEmail()}"></td>
+                        <td th:text="${user.getPassword()}"></td>
+                        <td>
+                            <a class="btn btn-info btn-sm" style="text-decoration: none; color: inherit" th:href="@{'/details/users/' + ${user.id}}">DETAILS</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div th:if="${roles!=null}" class="mt-3">
+                <table class="table table-striped" >
+                    <thead class="font-weight-bold">
+                    <tr>
+                        <td>Id</td>
+                        <td>Role</td>
+                        <td>DETAILS</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="role : ${roles}">
+                        <td th:text="${role.getId()}"></td>
+                        <td th:text="${role.getRole()}"></td>
+                        <td>
+                            <a class="btn btn-info btn-sm" style="text-decoration: none; color: inherit" th:href="@{'/details/roles/' + ${role.getId()}}">DETAILS</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div th:if="${items!=null}" class="mt-3">
+                <table class="table table-striped" >
+                    <thead class="font-weight-bold">
+                        <tr>
+                            <td>Id</td>
+                            <td>Name</td>
+                            <td>Description</td>
+                            <td>Price</td>
+                            <td>Stars</td>
+                            <td>AddedTime</td>
+                            <td>InTopPage</td>
+                            <td>Brand</td>
+                            <td>DETAILS</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="item : ${items}">
+                        <td th:text="${item.getId()}"></td>
+                        <td th:text="${item.getName()}"></td>
+                        <td th:text="${item.getDescription()}"></td>
+                        <td th:text="${item.getPrice()}"></td>
+                        <td th:text="${item.getStars()}"></td>
+                        <td th:text="${item.getAddedTime()}"></td>
+                        <td th:text="${item.getInTopPage()}"></td>
+                        <td th:text="${item.getBrand()!=null?item.getBrand().getName():'No brand'}"></td>
+                        <td>
+                            <a class="btn btn-info btn-sm" style="text-decoration: none; color: inherit" th:href="@{'/details/items/' + ${item.id}}">DETAILS</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div th:if="${countries!=null}" class="mt-3">
+                <table class="table table-striped" >
+                    <thead class="font-weight-bold">
+                    <tr>
+                        <td>Id</td>
+                        <td>Name</td>
+                        <td>Code</td>
+                        <td>DETAILS</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="cnt : ${countries}">
+                        <td th:text="${cnt.getId()}"></td>
+                        <td th:text="${cnt.getName()}"></td>
+                        <td th:text="${cnt.getCode()}"></td>
+                        <td>
+                            <a class="btn btn-info btn-sm" style="text-decoration: none; color: inherit" th:href="@{'/details/countries/' + ${cnt.id}}">DETAILS</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div th:if="${carts!=null}" class="mt-3">
+                <table class="table table-striped" >
+                    <thead class="font-weight-bold">
+                    <tr>
+                        <td>Id</td>
+                        <td>Paid Date</td>
+                        <td>DETAILS</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="br : ${carts}">
+                        <td th:text="${br.getId()}"></td>
+                        <td th:text="${br.getPaid_date()}"></td>
+                        <td>
+                            <a class="btn btn-info btn-sm" style="text-decoration: none; color: inherit" th:href="@{'/details/carts/' + ${br.getId()}}">DETAILS</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div th:if="${brands!=null}" class="mt-3">
+                <table class="table table-striped" >
+                    <thead class="font-weight-bold">
+                    <tr>
+                        <td>Id</td>
+                        <td>Name</td>
+                        <td>Country</td>
+                        <td>DETAILS</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="br : ${brands}">
+                        <td th:text="${br.getId()}"></td>
+                        <td th:text="${br.getName()}"></td>
+                        <td th:text="${br.getCountry()!=null?br.getCountry().getName():'No country'}"></td>
+                        <td>
+                            <a class="btn btn-info btn-sm" style="text-decoration: none; color: inherit" th:href="@{'/details/brands/' + ${br.getId()}}">DETAILS</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div th:if="${categories!=null}" class="mt-3">
+                <table class="table table-striped" >
+                    <thead class="font-weight-bold">
+                    <tr>
+                        <td>Id</td>
+                        <td>Name</td>
+                        <td>DETAILS</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="br : ${categories}">
+                        <td th:text="${br.getId()}"></td>
+                        <td th:text="${br.getName()}"></td>
+                        <td>
+                            <a class="btn btn-info btn-sm" style="text-decoration: none; color: inherit" th:href="@{'/details/categories/' + ${br.getId()}}">DETAILS</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+
+        </div>
+    </div>
+
+</div>
+</html>
