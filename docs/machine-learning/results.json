@@ -1,0 +1,39 @@
+{
+  "s1_knn_acc": 0.8,
+  "s2_logreg_acc": 1.0,
+  "s2_lin_mse": 0.5559,
+  "s2_lin_r2": 0.5758,
+  "s2_ridge_mse": 0.5558,
+  "s2_ridge_r2": 0.5759,
+  "s3_kmeans_inertia": 362.79,
+  "s3_dbscan_clusters": 2,
+  "s3_dbscan_outliers": 0,
+  "s4_or_preds": [
+    0,
+    1,
+    1,
+    1
+  ],
+  "s4_or_ok": true,
+  "s4_no_hidden_acc": 0.25,
+  "s4_hidden_accs": {
+    "2": 0.5,
+    "4": 0.5,
+    "8": 1.0
+  },
+  "s4_two_hidden_acc": 1.0,
+  "s4_act": {
+    "relu": [
+      0.5,
+      578
+    ],
+    "logistic": [
+      0.5,
+      172
+    ],
+    "tanh": [
+      1.0,
+      2330
+    ]
+  }
+}
